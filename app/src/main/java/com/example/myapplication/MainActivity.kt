@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyApplicationTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) {
-                    Text(text = "Hello World")
+                    CreateBizCard()
                 }
             }
         }
