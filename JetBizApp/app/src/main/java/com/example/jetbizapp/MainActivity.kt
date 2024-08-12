@@ -19,9 +19,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardElevation
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -74,10 +76,30 @@ fun CreateBizCard(){
             elevation = CardDefaults.cardElevation(defaultElevation = 40.dp))
         {
 
-            Column(modifier = Modifier.height(300.dp).fillMaxWidth(),
+            Column(modifier = Modifier
+                .height(300.dp)
+                .fillMaxWidth(),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally) {
                 CreateImageProfile()
+                HorizontalDivider(
+                    // It was called in Divider in material 2
+                    // but now it is called in HorizontalDivider.
+                    // In the course, instructor uses
+                    // startIndent as a parameter but I think
+                    // it is deprecated, using modifier with
+                    // width solves the problem for reducing
+                    // the width of the HorizontalDivider.
+                    // modifier = Modifier.width(130.dp)
+                    modifier = Modifier.fillMaxWidth(),
+                    color = Color.LightGray,
+                    thickness = 1.dp,
+                    )
+                CreateInfo()
+                Button(onClick = { /*TODO*/ }) {
+                    Text(text = "Portfolio",
+                        style = MaterialTheme.typography.titleMedium)
+                }
             }
         }
 
@@ -85,7 +107,37 @@ fun CreateBizCard(){
 }
 
 @Composable
-private fun CreateImageProfile() {
+private fun CreateInfo() {
+    Column(
+        modifier = Modifier.padding(5.dp),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
+    )
+    {
+        // In typography, instructor uses material 2
+        // but there are no instances like subtitle1
+        // or h4, So I use the existing ones in material 3
+        Text(
+            text = "Miles P.",
+            style = MaterialTheme.typography.headlineLarge,
+            color = MaterialTheme.colorScheme.primary
+        )
+
+        Text(
+            text = "Android Compose Programmer",
+            modifier = Modifier.padding(3.dp)
+        )
+
+        Text(
+            text = "@themilesCompose",
+            modifier = Modifier.padding(3.dp),
+            style = MaterialTheme.typography.titleMedium
+        )
+    }
+}
+
+@Composable
+private fun CreateImageProfile(modifier: Modifier = Modifier) {
     Surface(
         modifier = Modifier
             .size(150.dp)
