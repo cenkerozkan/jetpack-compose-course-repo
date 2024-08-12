@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -30,9 +32,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -59,17 +64,29 @@ fun CreateBizCard() {
         are some differences between those two,
         so the current usages are like in this code.
     */
-    Surface(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
+
+    // This is a state variable.
+    val buttonClickedState = remember {
+        mutableStateOf(false)
+    }
+    Surface(modifier = Modifier
+        .fillMaxWidth()
+        .fillMaxHeight()) {
         // The parameter dp is a unit of Android
         // for screen measurements.
         Card(
-            modifier = Modifier.width(200.dp).height(390.dp).padding(12.dp),
+            modifier = Modifier
+                .width(200.dp)
+                .height(390.dp)
+                .padding(12.dp),
             shape = RoundedCornerShape(corner = CornerSize(15.dp)),
             colors = CardDefaults.cardColors(Color.White),
             elevation = CardDefaults.cardElevation(defaultElevation = 40.dp)
         ) {
             Column(
-                modifier = Modifier.height(300.dp).fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth(),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -88,24 +105,46 @@ fun CreateBizCard() {
                     thickness = 1.dp,
                 )
                 CreateInfo()
-                Button(onClick = { Log.d("Clicked", "CreateBizCard: Clicked!!") }) {
+                Button(onClick = { buttonClickedState.value = !buttonClickedState.value }) {
                     Text(text = "Portfolio", style = MaterialTheme.typography.titleMedium)
                 }
-                Content()
+                if (buttonClickedState.value) {
+                    Log.d("Value: ", "${buttonClickedState.value}")
+                    Content()
+                }
             }
         }
     }
 }
 
 // We use Preview to observe during development.
-// @Preview(showBackground = true)
+//@Preview(showBackground = true)
 @Composable
 fun Content() {
-    Box(modifier = Modifier.fillMaxHeight().fillMaxWidth().padding(5.dp)) {
+    Box(modifier = Modifier
+        .fillMaxHeight()
+        .fillMaxWidth()
+        .padding(5.dp)) {
         Surface(
-            modifier = Modifier.padding(3.dp).fillMaxWidth().fillMaxHeight(),
+            modifier = Modifier
+                .padding(3.dp)
+                .fillMaxWidth()
+                .fillMaxHeight(),
             shape = RoundedCornerShape(corner = CornerSize(6.dp)),
-        ) {}
+            border = BorderStroke(width = 2.dp, color = Color.LightGray)
+        ) {
+            Portfolio(data = listOf("Project 1", "Project 2", "Project 3"))
+        }
+    }
+}
+
+@Composable
+fun Portfolio(data: List<String>) {
+    LazyColumn {
+        // NOTE: Repeat this lambda structure later !
+        items(data){ item ->
+            Text(text = item)
+        }
     }
 }
 
@@ -138,7 +177,9 @@ private fun CreateInfo() {
 @Composable
 private fun CreateImageProfile(modifier: Modifier = Modifier) {
     Surface(
-        modifier = Modifier.size(150.dp).padding(5.dp),
+        modifier = Modifier
+            .size(150.dp)
+            .padding(5.dp),
         shape = CircleShape,
         border = BorderStroke(0.5.dp, Color.LightGray),
         tonalElevation = 4.dp,
