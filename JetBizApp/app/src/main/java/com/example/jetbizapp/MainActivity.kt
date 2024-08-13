@@ -8,9 +8,11 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -44,6 +46,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.jetbizapp.R
 import com.example.jetbizapp.ui.theme.JetBizAppTheme
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -112,13 +115,18 @@ fun CreateBizCard() {
                     Log.d("Value: ", "${buttonClickedState.value}")
                     Content()
                 }
+                else{
+                    Box {
+
+                    }
+                }
             }
         }
     }
 }
 
 // We use Preview to observe during development.
-//@Preview(showBackground = true)
+@Preview(showBackground = true)
 @Composable
 fun Content() {
     Box(modifier = Modifier
@@ -133,18 +141,70 @@ fun Content() {
             shape = RoundedCornerShape(corner = CornerSize(6.dp)),
             border = BorderStroke(width = 2.dp, color = Color.LightGray)
         ) {
-            Portfolio(data = listOf("Project 1", "Project 2", "Project 3"))
+            Portfolio(data = listOf("Project 1", "Project 2", "Project 3", "Project 4", "Project 5", "Project 6"))
         }
     }
 }
 
 @Composable
 fun Portfolio(data: List<String>) {
-    LazyColumn {
+    LazyColumn() {
         // NOTE: Repeat this lambda structure later !
         items(data){ item ->
-            Text(text = item)
+            Card(
+                modifier = Modifier
+                    .padding(13.dp)
+                    .fillMaxWidth(),
+                shape = RectangleShape,
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surface)
+                        .padding(8.dp)
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Box {
+                        CreateProjectImage()
+                    }
+                    Box {
+                        Column {
+                            Text(text = item,
+                                style = MaterialTheme.typography.titleMedium)
+                            Text(text = "A great project indeed",
+                                style = MaterialTheme.typography.bodySmall)
+                        }
+                    }
+                    Box(modifier = Modifier.width(10.dp))
+                }
+            }
         }
+    }
+}
+
+// I did not actually follow the course on this part.
+@Composable
+private fun CreateProjectImage() {
+    Surface(
+        modifier = Modifier
+            .size(60.dp)
+            .padding(5.dp),
+        shape = CircleShape,
+        border = BorderStroke(0.5.dp, Color.LightGray),
+        tonalElevation = 4.dp,
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+        shadowElevation = 3.dp,
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.profile_image),
+            contentDescription = "profile image",
+            modifier = Modifier.size(135.dp),
+            contentScale = ContentScale.Crop
+        )
     }
 }
 
